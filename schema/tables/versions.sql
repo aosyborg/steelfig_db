@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS `steelfig`.`versions` ;
+
+CREATE TABLE IF NOT EXISTS `steelfig`.`versions` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `version` VARCHAR(255) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;

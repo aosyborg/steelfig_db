@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS `steelfig`.`api_tokens` ;
+
+CREATE TABLE IF NOT EXISTS `steelfig`.`api_tokens` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `token` CHAR(40) NOT NULL,
+  `name` VARCHAR(255) NULL,
+  `status` ENUM('enabled', 'disabled') NULL,
+  `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `token_UNIQUE` (`token` ASC))
+ENGINE = InnoDB;

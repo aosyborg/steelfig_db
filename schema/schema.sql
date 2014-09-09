@@ -1,0 +1,2 @@
+CREATE SCHEMA IF NOT EXISTS `steelfig` DEFAULT CHARACTER SET utf8 ;
+USE `steelfig` ;
