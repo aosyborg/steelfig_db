@@ -8,4 +8,4 @@ SELECT attendees.id,
        attendees.message
 FROM accounts
 JOIN attendees ON accounts.id = attendees.account_id
-ORDER by attendees.status DESC
+ORDER by attendees.status DESC;
