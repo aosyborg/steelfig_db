@@ -5,11 +5,15 @@
 MYSQL_USERNAME="root"
 MYSQL_DATABASE="steelfig"
 
+# Get database password
+echo "Password for $MYSQL_USERNAME@$MYSQL_DATABASE: "
+read MYSQL_PASSWORD
+
 # Create db if it doesn't already exist
-mysql -u$MYSQL_USERNAME -e "CREATE SCHEMA IF NOT EXISTS $MYSQL_DATABASE DEFAULT CHARACTER SET utf8;"
+mysql -u$MYSQL_USERNAME -p < ../schema/schema.sql
 
 # Select version
-VERSION=$(mysql -D$MYSQL_DATABASE -u$MYSQL_USERNAME -e "SELECT version FROM versions ORDER
+VERSION=$(mysql -D$MYSQL_DATABASE -u$MYSQL_USERNAME -p$MYSQL_PASSWORD -e "SELECT version FROM versions ORDER
         BY id DESC LIMIT 1;" -sN 2> /dev/null )
 
 # Need to decide if we are starting at the begining or not
@@ -24,7 +28,7 @@ fi
 for dir in `\ls -d */ | sort`
 do
     if [ $CAN_APPLY == true ]; then
-        mysql -D$MYSQL_DATABASE -u$MYSQL_USERNAME < ${dir}manifest.sql
+        mysql -D$MYSQL_DATABASE -u$MYSQL_USERNAME -p$MYSQL_PASSWORD < ${dir}manifest.sql
         if [ $? -ne 0 ]; then
             >&2 echo "Error applying patch: ${dir}"
             break
@@ -39,6 +43,6 @@ do
 done
 
 # Set updated version
-mysql -D$MYSQL_DATABASE -u$MYSQL_USERNAME -e "INSERT INTO versions SET version = '$VERSION'"
+mysql -D$MYSQL_DATABASE -u$MYSQL_USERNAME -p$MYSQL_PASSWORD -e "INSERT INTO versions SET version = '$VERSION'"
 
 echo "$MYSQL_DATABASE at version $VERSION"

@@ -50,16 +50,29 @@ BEGIN
             url = i_url,
             price = i_price,
             is_purchased = i_is_purchased,
-            sort = sort,
+            sort = 10000,
             comments = i_comments;
-        SELECT * FROM wishlist_items WHERE id = LAST_INSERT_ID();
 
     -- Update
     ELSE
-        -- Grab wishlist id
         SELECT wishlist_id INTO v_wishlist_id
         FROM wishlist_items
         WHERE id = i_wishlist_item_id;
+
+        -- Update sort values
+        IF i_sort IS NOT NULL THEN
+            IF i_sort < (SELECT sort FROM wishlist_items where id = i_wishlist_item_id) THEN
+                UPDATE wishlist_items SET
+                    sort = sort + 1
+                    WHERE wishlist_id = v_wishlist_id
+                    AND sort >= i_sort;
+            ELSE
+                UPDATE wishlist_items SET
+                    sort = sort - 1
+                    WHERE wishlist_id = v_wishlist_id
+                    AND sort <= i_sort;
+            END IF;
+        END IF;
 
         UPDATE wishlist_items SET
             name = COALESCE(i_name, name),
@@ -70,10 +83,17 @@ BEGIN
             sort = COALESCE(i_sort, sort),
             comments = COALESCE(i_comments, comments)
         WHERE id = i_wishlist_item_id;
-        SELECT * FROM wishlist_items WHERE id = i_wishlist_item_id;
     END IF;
 
+    -- Fix sort id
+    SET @n = -1;
+    UPDATE wishlist_items SET
+        sort = (@n:=@n+1)
+    WHERE wishlist_id = v_wishlist_id
+    ORDER BY sort;
+
     -- Return
+    SELECT * FROM wishlist_items WHERE id = COALESCE(i_wishlist_item_id, LAST_INSERT_ID());
 
     COMMIT;
 END $$
