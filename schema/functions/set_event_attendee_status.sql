@@ -27,6 +27,7 @@ BEGIN
 
     -- Return
     SELECT v_events.*,
+        attendees.account_id AS account_id,
         attendees.status AS attendee_status,
         attendees.message AS attendee_message
     FROM v_events
