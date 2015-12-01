@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `steelfig`.`attendees` (
   `account_id` INT UNSIGNED NOT NULL,
   `buying_for` INT UNSIGNED NULL,
   `status` TINYINT UNSIGNED NOT NULL DEFAULT 0, -- 0 pending 1 maybe 2 declined 3 attending
-  `message` VARCHAR(255) NULL,
+  `comment` VARCHAR(255) NULL,
   `notify_on_event_update` TINYINT(1) NOT NULL DEFAULT 1,
   `notify_on_list_update` TINYINT(1) NOT NULL DEFAULT 0,
   `notify_on_recipient_list_update` TINYINT(1) NOT NULL DEFAULT 0,

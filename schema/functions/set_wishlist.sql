@@ -42,12 +42,12 @@ BEGIN
             IF i_sort < (SELECT sort FROM wishlists where id = i_wishlist_id) THEN
                 UPDATE wishlists SET
                     sort = sort + 1
-                    WHERE id = i_wishlist_id
+                    WHERE attendee_id = v_attendee_id
                     AND sort >= i_sort;
             ELSE
                 UPDATE wishlists SET
                     sort = sort - 1
-                    WHERE id = i_wishlist_id
+                    WHERE attendee_id = v_attendee_id
                     AND sort <= i_sort;
             END IF;
         END IF;
@@ -57,7 +57,6 @@ BEGIN
             name = COALESCE(i_name, name),
             url = COALESCE(i_url, url),
             price = COALESCE(i_price, price),
-            is_purchased = COALESCE(i_is_purchased, is_purchased),
             sort = COALESCE(i_sort, sort),
             comments = COALESCE(i_comments, comments)
         WHERE id = i_wishlist_id;
@@ -67,7 +66,7 @@ BEGIN
     SET @n = -1;
     UPDATE wishlists SET
         sort = (@n:=@n+1)
-    WHERE id = i_wishlist_id
+    WHERE attendee_id = v_attendee_id
     ORDER BY sort;
 
     -- Return
